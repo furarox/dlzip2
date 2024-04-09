@@ -1,1 +1,4 @@
 /target
+python/dlzip2.egg-info
+python/dlzip2/_dlzip2.cpython-312-darwin.so
+*__pycache__*
