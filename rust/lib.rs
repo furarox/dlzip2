@@ -7,7 +7,7 @@ mod z_rle;
 
 
 #[pyfunction]
-fn compress(text_content: Vec<usize>) -> PyResult<Vec<u8>> {
+fn _compress(text_content: Vec<usize>) -> PyResult<Vec<u8>> {
     let code = bwt::bwt_encode(text_content);
     let code = mtf::mtf_encode(code);
     let code = z_rle::zrle_encode(code);
@@ -15,7 +15,7 @@ fn compress(text_content: Vec<usize>) -> PyResult<Vec<u8>> {
 }
 
 #[pyfunction]
-fn decompress(text_content: Vec<u8>) -> PyResult<Vec<u8>> {
+fn _decompress(text_content: Vec<u8>) -> PyResult<Vec<u8>> {
     let decode = huffman::huffman_decode(text_content);
     let decode = z_rle::zrle_decode(decode);
     let decode = mtf::mtf_decode(decode);
@@ -24,8 +24,8 @@ fn decompress(text_content: Vec<u8>) -> PyResult<Vec<u8>> {
 
 #[pymodule]
 fn _dlzip2(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(compress, m)?)?;
-    m.add_function(wrap_pyfunction!(decompress, m)?)?;
+    m.add_function(wrap_pyfunction!(_compress, m)?)?;
+    m.add_function(wrap_pyfunction!(_decompress, m)?)?;
     Ok(())
 }
 
