@@ -3,6 +3,8 @@ from dlzip2._dlzip2 import _compress, _decompress
 
 def compress(content: list[int] | bytes | str) -> bytes:
     """Compress content using dlzip2 algorithm
+    This function is just a wrapper around the Rust function responsible of
+    the compression
 
     Parameters
     -----------
@@ -21,7 +23,7 @@ def compress(content: list[int] | bytes | str) -> bytes:
         content = bytes(content, "utf8")
         return bytes(_compress(content))
     elif isinstance(content, bytes):
-        return _compress(content)
+        return bytes(_compress(content))
     elif isinstance(content, list):
         if min(content) < 0 or max(content) > 255:
             raise ValueError(
@@ -34,9 +36,11 @@ def compress(content: list[int] | bytes | str) -> bytes:
             f" {type(content)}")
 
 
-def decompress(content: bytes, return_type='bytes') -> bytes | str:
+def decompress(content: bytes, *, return_type='bytes') -> bytes | str:
     """Decompress the bytes of data using the inverse transformation of
     compress
+    This function is just a wrapper around the Rust function responsible of
+    the decompression
 
     Parameters
     -----------
@@ -44,8 +48,12 @@ def decompress(content: bytes, return_type='bytes') -> bytes | str:
         bytes of data to decrompress
     return_type : str = 'bytes'
         {'str', 'bytes'} type of the return element
+
+    Returns
+    ---------
+    bytes | str
+        decompressed content with type specified by return_type
     """
-    #
     if not isinstance(content, bytes):
         raise TypeError(f"content should be bytes, not {type(content)}")
 
