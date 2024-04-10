@@ -6,6 +6,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dlzip2"
 version = "0.1.0"
+requires-python = ">=3.8"
+authors = [{name="Fura"}]
+description = "useless and slow compression package"
+readme = 'README.md'
+license = {file = "LICENSE.txt"}
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Rust"
+]
 
 [tool.setuptools.packages]
 # Pure Python packages/modules
