@@ -73,7 +73,7 @@ But there are less common patterns in small text rather than in big texts)
 First of all, the algorithm used for compression is a slower and less performant version of bzip2.
 This algorithm comes from an exercice of one of my teacher, which initial are D.L., thus the name of package.
 
-This project was my first project to learn Rust (god damn linked list in mtf.rs hit hard) and, but also to enhance my skills in python packaging.
+This project was my first project to learn Rust (god damn linked list in mtf.rs hit hard), but also to enhance my skills in python packaging.
 I also discovered pyo3, and the possibility to connect python and rust for the best of the two languages.
 I do not recommend to use this package in production (because it's still really slow), but it can be a good way to discover 
 rust, pyo3 and python packaging
