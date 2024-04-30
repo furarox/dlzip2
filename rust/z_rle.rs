@@ -72,9 +72,8 @@ pub fn zrle_decode(text_content: Vec<usize>) -> Vec<usize> {
                 idx_end += 1;
             }
             let length = from_zrle_to_int(&text_content[idx_deb..idx_end]);
-            for _ in 0..length {
-                result.push(0);
-            }
+            let mut zero_vec = vec![0; length];
+            result.append(&mut zero_vec); 
             idx_deb = idx_end;
         }
     }

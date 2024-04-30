@@ -6,3 +6,4 @@ python/dlzip2/_dlzip2.cpython-312-darwin.so
 Cargo.lock
 *.DS_Store
 build*
+*.pdf

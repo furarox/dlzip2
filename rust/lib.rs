@@ -1,10 +1,10 @@
 use pyo3::prelude::*;
 
 mod bwt;
+pub mod content;
 mod huffman;
 mod mtf;
 mod z_rle;
-
 
 #[pyfunction]
 fn _compress(text_content: Vec<usize>) -> PyResult<Vec<u8>> {
@@ -48,7 +48,6 @@ mod test {
         let mut decode = z_rle::zrle_decode(code);
         decode = mtf::mtf_decode(decode);
         let _decode = bwt::bwt_decode(decode);
-
     }
 
     #[test]
@@ -61,7 +60,10 @@ mod test {
         code = z_rle::zrle_encode(code);
         let code = huffman::huffman_encode(code);
 
-        println!("Compression ratio: {} %", (code.len() as f64 / text_len as f64) * 100 as f64);
+        println!(
+            "Compression ratio: {} %",
+            (code.len() as f64 / text_len as f64) * 100 as f64
+        );
 
         let mut decode = huffman::huffman_decode(code);
         decode = z_rle::zrle_decode(decode);

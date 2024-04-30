@@ -62,11 +62,7 @@ impl Occurence {
         }
     }
     fn less(occur1: &Occurence, occur2: &Occurence) -> bool {
-        if occur1.int < occur2.int && occur1.finite {
-            return true;
-        } else {
-            return false;
-        }
+        occur1.int < occur2.int && occur1.finite
     }
 }
 
@@ -170,9 +166,9 @@ struct Huffman {
     codes: HashMap<usize, Vec<u8>>,
 }
 
-fn count_occurence(content: &Vec<usize>, occurence: &mut [u32; 260]) {
+fn count_occurence(content: &[usize], occurence: &mut [u32; 260]) {
     for el in content.iter() {
-        occurence[*el as usize] += 1;
+        occurence[*el] += 1;
     }
 }
 
@@ -195,7 +191,7 @@ impl Huffman {
         for (code, occur) in occurence.iter().enumerate() {
             if *occur > 0 {
                 queue.insert(HuffmanTreeNode {
-                    symbol: Some(code as usize),
+                    symbol: Some(code),
                     occurence: Occurence::new(*occur as u64),
                     left_child: None,
                     right_child: None,
@@ -235,7 +231,7 @@ impl Huffman {
         }
 
         if node.symbol.is_some() {
-            let index = *(node.symbol.as_ref().unwrap()) as usize;
+            let index = *(node.symbol.as_ref().unwrap());
             codemap.insert(index, code);
         }
     }
@@ -262,8 +258,8 @@ impl Huffman {
 
         for element in content.iter() {
             for &bit in self.codes[element as &usize].iter() {
-                tmp = tmp << 1;
-                tmp = tmp | bit;
+                tmp <<= 1;
+                tmp |= bit;
                 c += 1;
 
                 if c == 8 {
@@ -275,7 +271,7 @@ impl Huffman {
         }
 
         if c > 0 {
-            tmp = tmp << (8 - c);
+            tmp <<= 8 - c;
             result.push(tmp);
         }
         let codes = self.canonical_diffs();
@@ -284,7 +280,7 @@ impl Huffman {
         let code_len = codes.len();
         let first_bit_len = 0xFF00 & code_len;
         let first_bit_len = (first_bit_len >> 8) as u8;
-        let second_bit_len = 0xFF & code_len as u8;
+        let second_bit_len = code_len as u8;
         codes.insert(0, second_bit_len);
         codes.insert(0, first_bit_len);
 
@@ -320,12 +316,11 @@ impl Huffman {
                     if symbol == HUFFMAN_MARKER {
                         return result;
                     }
-                    let symbol = symbol;
                     result.push(symbol);
                     node = self.tree.as_ref().unwrap().as_ref();
                 }
 
-                element = element << 1;
+                element <<= 1;
             }
         }
 
@@ -369,7 +364,7 @@ impl Huffman {
             let length_diff = can_diffs[i+1];
 
             if length_diff > 0 {
-                c = c << (length_diff);
+                c <<= length_diff;
                 last_length += length_diff;
             }
             let new_code = binary_list(c, last_length);
@@ -418,7 +413,7 @@ impl Huffman {
                 let length_diff = codes[i+1];
 
                 if length_diff > 0 {
-                    c = c << length_diff;
+                    c <<= length_diff;
                     last_length += length_diff;
                 }
 
@@ -453,7 +448,7 @@ fn binary_list(mut x: usize, len: usize) -> Vec<u8> {
     result
 }
 
-fn split_symbol(codes: &Vec<usize>) -> Vec<u8> {
+fn split_symbol(codes: &[usize]) -> Vec<u8> {
     let mut res: Vec<u8> = Vec::with_capacity(codes.len());
 
     for &el in codes.iter() {
@@ -478,11 +473,11 @@ fn merge_symbol(codes: &[u8]) -> Vec<usize> {
             let r = 256 + codes[i+1] as usize;
             res.push(r);
             res.push(codes[i+2] as usize);
-            i = i + 3;
+            i += 3;
         } else {
             res.push(codes[i] as usize);
             res.push(codes[i+1] as usize);
-            i = i + 2;
+            i += 2;
         }
     }
 
